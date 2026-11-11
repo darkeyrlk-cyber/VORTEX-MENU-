@@ -45,6 +45,22 @@ jobs:
               p.write_text(s)
           PY
 
+      - name: Fix WRAP_CONTENT reference
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          p = Path("app/src/main/java/com/vortex/menu/OverlayService.kt")
+          s = p.read_text()
+          s = re.sub(
+              r"(?<![\w.])WRAP_CONTENT\b",
+              "android.view.ViewGroup.LayoutParams.WRAP_CONTENT",
+              s
+          )
+          p.write_text(s)
+          PY
+
       - name: Build APK
         run: gradle --no-daemon assembleDebug
 
